@@ -1,13 +1,17 @@
 {
   "name": "monoapps",
-  "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "supabase": "supabase",
+    "supabase:init": "supabase init",
+    "supabase:start": "supabase start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.6.3"
+  "packageManager": "pnpm@10.9.0",
+  "dependencies": {
+    "supabase": "^2.22.6",
+    "typescript": "^5.8.3"
+  }
 }
