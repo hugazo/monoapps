@@ -6,13 +6,25 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "ios": "bash ./scripts/ios.sh",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@capacitor/android": "7.2.0",
+    "@capacitor/app": "7.0.1",
+    "@capacitor/core": "7.2.0",
+    "@capacitor/haptics": "7.0.1",
+    "@capacitor/ios": "7.2.0",
+    "@capacitor/keyboard": "7.0.1",
+    "@capacitor/status-bar": "7.0.1",
     "@mono/base-config": "workspace:*",
+    "@nuxtjs/ionic": "0.18.0",
     "nuxt": "^3.16.2",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "7.2.0"
   }
 }
