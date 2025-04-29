@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   extends: ['@mono/base-config'],
-  modules: ['@nuxtjs/ionic'],
+  modules: ['@nuxtjs/ionic', '@nuxtjs/tailwindcss'],
   ssr: false,
   devtools: { enabled: true },
   css: ['~/assets/css/ionic.css'],
