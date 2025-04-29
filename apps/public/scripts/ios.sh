@@ -1,5 +1,7 @@
 #!/bin/bash
-LIP=$(ipconfig getifaddr en0)
+# This when opening nuxt to local network
+# LIP=$(ipconfig getifaddr en0)
+LIP="localhost"
 
 echo "🍦 Starting local development to ios device - ensure local dev server is running already"
 echo "🏗️ Type checking and building for development..."
