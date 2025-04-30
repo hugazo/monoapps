@@ -1,9 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   extends: ['@mono/base-config'],
-  modules: ['@nuxtjs/ionic', '@nuxtjs/tailwindcss'],
+  modules: [
+    '@nuxtjs/ionic',
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/supabase',
+    '@pinia/nuxt',
+  ],
   ssr: false,
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   css: ['~/assets/css/ionic.css'],
   future: {
     compatibilityVersion: 4,
@@ -13,5 +18,8 @@ export default defineNuxtConfig({
     css: {
       utilities: true,
     },
+  },
+  supabase: {
+    redirect: false,
   },
 });
