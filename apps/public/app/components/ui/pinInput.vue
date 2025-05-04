@@ -73,6 +73,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  sendAfterPaste: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const emit = defineEmits<{
@@ -112,6 +116,9 @@ const handlePaste = (event: ClipboardEvent) => {
         target.blur();
       }
       updateInputValues(pastedData);
+      if (props.sendAfterPaste) {
+        emit('finishedInput', finalValue.value);
+      }
     }
     else {
       event.preventDefault();
@@ -194,7 +201,6 @@ const updateInputValues = (value: string) => {
   [...value].forEach((char, index) => {
     inputValues.value[index] = char;
   });
-  handleFinishedPinInput();
 };
 
 const handleFocus = (event: CustomEvent) => {
