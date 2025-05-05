@@ -6,7 +6,7 @@
         :key="ids"
         :value="inputValues[index]"
         class="pin-input"
-        placeholder="X"
+        :placeholder="props.placeholder"
         :index="index"
         type="text"
         inputmode="numeric"
@@ -18,6 +18,8 @@
         @ion-focus="handleFocus($event)"
         @ion-input="handleIonInput($event, index)"
         @keydown.delete="handleDeleteKey($event)"
+        @keydown.left="handleLeftKey($event)"
+        @keydown.right="handleRightKey($event)"
         @ion-blur="handleBlur($event)"
         @paste="handlePaste($event)"
       />
@@ -76,6 +78,10 @@ const props = defineProps({
   sendAfterPaste: {
     type: Boolean,
     default: true,
+  },
+  placeholder: {
+    type: String,
+    default: 'X',
   },
 });
 
@@ -218,6 +224,28 @@ const handleBlur = (event: CustomEvent) => {
   const target = event.target as HTMLIonInputElement;
   if (target) {
     target.style.background = 'transparent';
+  }
+};
+
+const handleLeftKey = (event: KeyboardEvent) => {
+  const target = event.currentTarget as HTMLIonInputElement;
+  if (target) {
+    const prevInput = target.previousElementSibling as HTMLIonInputElement;
+    if (prevInput) {
+      prevInput.setFocus();
+      event.preventDefault();
+    }
+  }
+};
+
+const handleRightKey = (event: KeyboardEvent) => {
+  const target = event.currentTarget as HTMLIonInputElement;
+  if (target) {
+    const nextInput = target.nextElementSibling as HTMLIonInputElement;
+    if (nextInput) {
+      nextInput.setFocus();
+      event.preventDefault();
+    }
   }
 };
 
