@@ -21,6 +21,7 @@
         @keydown.left="handleLeftKey($event)"
         @keydown.right="handleRightKey($event)"
         @ion-blur="handleBlur($event)"
+        @click="handleClick($event)"
         @paste="handlePaste($event)"
       />
     </ion-row>
@@ -190,8 +191,11 @@ const handleIonInput = (event: CustomEvent, currentIndex: number) => {
       nextInput.setFocus();
     }
     else {
-      input.nativeInput.blur();
-      handleFinishedPinInput();
+      // We unfocus only if all inputs are filled
+      if (validInput.value) {
+        input.nativeInput.blur();
+        handleFinishedPinInput();
+      }
     }
     return;
   }
@@ -246,6 +250,14 @@ const handleRightKey = (event: KeyboardEvent) => {
       nextInput.setFocus();
       event.preventDefault();
     }
+  }
+};
+
+const handleClick = (event: MouseEvent) => {
+  const target = event.currentTarget as HTMLIonInputElement;
+  if (target) {
+    target.setFocus();
+    event.preventDefault();
   }
 };
 
