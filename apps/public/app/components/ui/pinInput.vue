@@ -217,7 +217,8 @@ const handleFocus = (event: CustomEvent) => {
   const target = event.target as CustomIonInputElement;
   if (target) {
     target.style.background = 'var(--ion-color-primary)';
-    target.style.transition = 'background 0.3s ease-in-out';
+    target.style.border = '2px solid var(--ion-color-primary)';
+    target.style.transition = '0.3s ease-in-out';
     if (target.nativeInput.value.length) {
       target.nativeInput.setSelectionRange(0, target.nativeInput.value.length);
     }
@@ -228,6 +229,7 @@ const handleBlur = (event: CustomEvent) => {
   const target = event.target as HTMLIonInputElement;
   if (target) {
     target.style.background = 'transparent';
+    target.style.border = '2px solid var(--ion-color-light-shade)';
   }
 };
 
@@ -272,10 +274,13 @@ ion-input.pin-input {
   height: 3rem;
   margin: 0 0.3rem;
   text-align: center;
+  color: var(--ion-color-light-shade);
   font-size: 2rem;
   border-radius: 14px;
+  border: 2px solid var(--ion-color-light-shade);
   --highlight-color-focused: transparent;
   ::selection {
+    border: transparent;
     background: transparent;
   }
 }
