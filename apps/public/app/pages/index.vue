@@ -22,6 +22,12 @@
               <ion-button router-link="/login">
                 Go to login
               </ion-button>
+              <ion-button
+                v-if="state.user"
+                @click="logout"
+              >
+                Logout
+              </ion-button>
             </div>
           </ion-col>
         </ion-row>
@@ -34,3 +40,10 @@
     </ion-footer>
   </ion-page>
 </template>
+
+<script setup lang="ts">
+const {
+  state,
+  logout,
+} = useSession();
+</script>

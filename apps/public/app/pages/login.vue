@@ -15,17 +15,27 @@
         <ion-row class="w-full max-w-lg">
           <ion-col>
             <ion-input
-              v-model="email"
+              v-model="loginForm.data.value.email"
+              :disabled="loginForm.isSubmitting.value"
               label="Email"
               type="email"
               placeholder="user@company"
             />
             <ion-input
-              v-model="password"
+              v-model="loginForm.data.value.password"
+              :disabled="loginForm.isSubmitting.value"
               label="Password"
               type="password"
               placeholder="Enter your password"
             />
+            <ion-button
+              class="mt-4"
+              shape="round"
+              expand="full"
+              @click="handleLogin"
+            >
+              Login
+            </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -34,8 +44,20 @@
 </template>
 
 <script async setup lang="ts">
-const email = ref('');
-const password = ref('');
+const {
+  loginForm,
+  handleLogin,
+} = useSession();
 
-// TODO: Implement login logic
+onUnmounted(() => {
+  console.log('Unmounting login page');
+});
+
+
+// Disables auth checking and redirects if authenticated
+definePageMeta({
+  allowUnauthenticated: true,
+  redirectIfAuthenticated: true,
+  // layout: 'unauthenticated',
+});
 </script>
