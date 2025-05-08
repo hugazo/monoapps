@@ -41,7 +41,7 @@ export default () => {
 
   const logout = async () => {
     await auth.signOut();
-    state.clearUser();
+    state.$reset();
   };
 
   // Helper for watcher

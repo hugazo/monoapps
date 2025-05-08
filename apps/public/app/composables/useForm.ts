@@ -1,7 +1,7 @@
 import type { z } from 'zod';
 
 export const useForm = <T extends z.ZodType>(schema: T, initialData: z.infer<T> = {} as z.infer<T>) => {
-  const _initialData = JSON.stringify(initialData)
+  const _initialData = JSON.stringify(initialData);
   const data = ref<z.infer<T>>(initialData);
 
   const errors = ref<z.ZodIssue[]>([]);
@@ -31,7 +31,6 @@ export const useForm = <T extends z.ZodType>(schema: T, initialData: z.infer<T> 
   };
 
   const clearForm = () => {
-    console.log('Clearing form', _initialData);
     data.value = JSON.parse(_initialData);
     errors.value = [];
   };

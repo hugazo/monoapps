@@ -22,6 +22,16 @@ export default defineStore('auth', () => {
   const user = ref <User | null>(null);
   const loggedIn = computed(() => user.value?.id ? true : false);
 
+  // MFA
+  const factors = ref<Factor[] | null>(null);
+  const firstFactor = ref<AuthMFAEnrollTOTPResponse | null>(null);
+
+  const $reset = () => {
+    user.value = null;
+    factors.value = null;
+    firstFactor.value = null;
+  };
+
   return {
     user,
     loggedIn,
@@ -29,5 +39,6 @@ export default defineStore('auth', () => {
     firstFactor,
     fillUser,
     clearUser,
+    $reset,
   };
 });
