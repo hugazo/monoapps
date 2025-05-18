@@ -9,7 +9,9 @@ export default defineNuxtConfig({
   ],
   ssr: false,
   devtools: { enabled: false },
-  css: ['~/assets/css/ionic.css'],
+  css: [
+    '~/assets/css/ionic.css',
+  ],
   future: {
     compatibilityVersion: 4,
   },
@@ -21,5 +23,6 @@ export default defineNuxtConfig({
   },
   supabase: {
     redirect: false,
+    useSsrCookies: false,
   },
 });
