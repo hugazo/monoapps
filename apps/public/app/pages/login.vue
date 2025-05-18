@@ -54,14 +54,9 @@ const {
   handleLogin,
 } = useSession();
 
-onUnmounted(() => {
-  console.log('Unmounting login page');
-});
-
 // Disables auth checking and redirects if authenticated
 definePageMeta({
   allowUnauthenticated: true,
   redirectIfAuthenticated: true,
-  // layout: 'unauthenticated',
 });
 </script>

@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
   ],
   ssr: false,
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   css: [
     '~/assets/css/ionic.css',
   ],
