@@ -35,7 +35,7 @@ export default () => {
       console.error('Login error', result.error);
     }
     loginForm.clearForm();
-    await state.fillUser();
+    state.user = result.data.user;
     loginForm.isSubmitting.value = false;
   };
 
@@ -51,11 +51,9 @@ export default () => {
   watch(loggedIn, async (newValue, oldValue) => {
     // Triggers only when logged status changes
     if (newValue !== oldValue) {
-      // User logs in
       if (newValue) {
         authRedirect();
       }
-      // User logs out
       else {
         logoutRedirect();
       }

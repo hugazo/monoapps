@@ -1,7 +1,12 @@
 <template>
   <ion-page>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Verify</ion-title>
+      </ion-toolbar>
+    </ion-header>
     <ion-content>
-      <ion-grid>
+      <ion-grid class="flex flex-col h-full items-center justify-center">
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-text-center">
             <h1 class="text-2xl font-bold">

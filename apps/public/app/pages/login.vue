@@ -1,5 +1,10 @@
 <template>
   <ion-page>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Login</ion-title>
+      </ion-toolbar>
+    </ion-header>
     <ion-content>
       <ion-grid class="flex flex-col h-full items-center justify-center">
         <ion-row>
@@ -52,7 +57,6 @@ const {
 onUnmounted(() => {
   console.log('Unmounting login page');
 });
-
 
 // Disables auth checking and redirects if authenticated
 definePageMeta({
