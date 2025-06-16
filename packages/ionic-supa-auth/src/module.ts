@@ -7,7 +7,12 @@ import {
 } from '@nuxt/kit';
 
 const defaultOptions = {
-  enableSsr: false, // Default to false since Ionic requires client-side rendering
+  // Default to false since Ionic requires client-side rendering
+  enableSsr: false,
+  supabase: {
+    url: '',
+    key: '',
+  },
 };
 
 // Module options TypeScript interface definition
@@ -31,6 +36,16 @@ export default defineNuxtModule<ModuleOptions>({
       css: {
         utilities: true,
       },
+    });
+
+    // Adds the supabase module to our Nuxt project
+    await installModule('@nuxtjs/supabase', {
+      // Use the public Supabase URL and Key from environment variables
+      url: options.supabase.url,
+      key: options.supabase.key,
+      // Changes Options for Supabase Client Side and Auth
+      redirect: false,
+      useSsrCookies: false,
     });
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`

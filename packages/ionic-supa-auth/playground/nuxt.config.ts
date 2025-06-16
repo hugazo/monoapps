@@ -3,5 +3,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   supaAuth: {
     // Options for the Supabase Auth module
+    supabase: {
+      url: '',
+      key: '',
+    },
   },
 });
