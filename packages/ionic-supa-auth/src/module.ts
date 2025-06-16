@@ -21,11 +21,8 @@ export default defineNuxtModule<ModuleOptions>({
 
     // Add the Ionic Module to our Nuxt project
     await installModule('@nuxtjs/ionic', {
-      exposeConfig: true,
-      config: {
-        css: {
-          utilities: true,
-        },
+      css: {
+        utilities: true,
       },
     });
 
