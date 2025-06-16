@@ -6,8 +6,12 @@ import {
   installModule,
 } from '@nuxt/kit';
 
+const defaultOptions = {
+  enableSsr: false, // Default to false since Ionic requires client-side rendering
+};
+
 // Module options TypeScript interface definition
-export type ModuleOptions = object;
+export type ModuleOptions = typeof defaultOptions;
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
@@ -15,9 +19,12 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: 'supaAuth',
   },
   // Default configuration options of the Nuxt module
-  defaults: {},
-  async setup(_options, _nuxt) {
+  defaults: defaultOptions,
+  async setup(options, nuxt) {
     // const resolver = createResolver(import.meta.url);
+
+    // Sets the project as only Client-side (Since Ionic Requires it)
+    nuxt.options.ssr = options.enableSsr;
 
     // Add the Ionic Module to our Nuxt project
     await installModule('@nuxtjs/ionic', {
