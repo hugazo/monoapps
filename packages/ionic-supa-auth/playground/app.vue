@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <ion-app>
     Nuxt module playground!
-  </div>
+  </ion-app>
 </template>
 
 <script setup>

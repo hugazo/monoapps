@@ -1,8 +1,8 @@
 {
-  "name": "my-module",
+  "name": "supabase-ionic-auth",
   "version": "1.0.0",
   "description": "My new Nuxt module",
-  "repository": "your-org/my-module",
+  "repository": "@monoapps/supabase-ionic-auth",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -34,7 +34,8 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.17.5"
+    "@nuxt/kit": "^3.17.5",
+    "@nuxtjs/ionic": "0.18.0"
   },
   "devDependencies": {
     "@nuxt/devtools": "^2.4.1",
