@@ -1,6 +1,9 @@
 export default defineNuxtConfig({
   modules: ['../src/module'],
-  devtools: { enabled: true },
+  ssr: false,
+  devtools: {
+    enabled: true,
+  },
   supaAuth: {
     // Options for the Supabase Auth module
     supabase: {

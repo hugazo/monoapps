@@ -1,9 +1,14 @@
 import {
   defineNuxtModule,
   // addPlugin,
-  // createResolver,
+  createResolver,
   // addRouteMiddleware,
   installModule,
+  addTypeTemplate,
+  addRouteMiddleware,
+  updateRuntimeConfig,
+  extendPages,
+  addImports,
 } from '@nuxt/kit';
 
 const defaultOptions = {
@@ -12,6 +17,12 @@ const defaultOptions = {
   supabase: {
     url: '',
     key: '',
+  },
+  auth: {
+    // Default options for the Supabase Auth module
+    enabled: true,
+    loginPage: '/login',
+    homePage: '/',
   },
 };
 
@@ -26,7 +37,7 @@ export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: defaultOptions,
   async setup(options, nuxt) {
-    // const resolver = createResolver(import.meta.url);
+    const { resolve } = createResolver(import.meta.url);
 
     // Sets the project as only Client-side (Since Ionic Requires it)
     nuxt.options.ssr = options.enableSsr;
@@ -48,7 +59,53 @@ export default defineNuxtModule<ModuleOptions>({
       useSsrCookies: false,
     });
 
-    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
-    // addPlugin(resolver.resolve('./runtime/plugin'));
+    await installModule('@pinia/nuxt');
+
+    if (options.auth.enabled) {
+      updateRuntimeConfig({
+        public: {
+          loginPage: options.auth.loginPage,
+          homePage: options.auth.homePage,
+        },
+      });
+      // Extends the #app types to support auth options in components
+      addTypeTemplate({
+        filename: 'types/ionic-supa-auth.d.ts',
+        getContents: () => `declare module '#app' {
+  interface PageMeta {
+    allowUnauthenticated?: boolean;
+    redirectIfAuthenticated?: boolean;
+    allowNonEnrolled?: boolean;
+    allowUnverified?: boolean;
+  }
+}`,
+      });
+
+      extendPages((pages) => {
+        // Adds the login page to the pages
+        pages.push({
+          name: 'login-page',
+          path: options.auth.loginPage,
+          file: resolve('./runtime/pages/login-page.vue'),
+          meta: {
+            // Makes the login page public-only
+            allowUnauthenticated: true,
+            redirectIfAuthenticated: true,
+          },
+        });
+      });
+
+      addImports({
+        name: 'default',
+        as: 'useAuth',
+        from: resolve('./runtime/composables/useAuth'),
+      });
+
+      addRouteMiddleware({
+        name: 'auth.global',
+        path: resolve('./runtime/middleware/00-auth'),
+        global: true,
+      });
+    }
   },
 });

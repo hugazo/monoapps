@@ -1,8 +1,9 @@
 <template>
   <ion-app>
-    Nuxt module playground!
+    <ion-router-outlet />
   </ion-app>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// App wide options
 </script>
