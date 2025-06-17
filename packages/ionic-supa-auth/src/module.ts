@@ -1,10 +1,10 @@
 import {
   defineNuxtModule,
-  // addPlugin,
   createResolver,
 } from '@nuxt/kit';
 import setupCommonModules from './setup/common';
 import setupAuth from './setup/auth';
+import setupMfa from './setup/mfa';
 
 const defaultOptions = {
   // Default to false since Ionic requires client-side rendering
@@ -19,9 +19,9 @@ const defaultOptions = {
     homePage: '/',
     loginPage: '/login',
     // 2fa settings
-    enrollUrl: '/enroll',
+    enrollPage: '/enroll',
     enable2fa: true,
-    verifyUrl: '/verify',
+    verifyPage: '/verify',
   },
 };
 
@@ -45,6 +45,13 @@ export default defineNuxtModule<ModuleOptions>({
       // Executes the auth setup for the module
       // This will add the auth composable, middleware, and pages
       setupAuth(options, resolver);
+
+      // Executes the 2FA setup for the module
+      // This will add the 2FA composable, middleware, and pages
+      if (options.auth.enable2fa) {
+        // Push Both 2FA pages to the pages
+        setupMfa(options, resolver);
+      }
     }
   },
 });

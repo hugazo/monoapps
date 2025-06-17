@@ -23,5 +23,7 @@ export default async (options: ModuleOptions, nuxt: Nuxt) => {
     useSsrCookies: false,
   });
 
+  await installModule('@nuxt/image');
+
   await installModule('@pinia/nuxt');
 };

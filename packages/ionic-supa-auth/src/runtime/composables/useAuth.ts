@@ -1,4 +1,4 @@
-import type { RouteLocationNormalizedGeneric } from 'vue-router';
+import type { RouteLocationNormalizedGeneric, RouteRecordNormalized } from 'vue-router';
 import { z } from 'zod/v4';
 import { useForm } from '../composables/useForm';
 import authStore from '../store/auth';
@@ -19,14 +19,10 @@ export const useAuth = () => {
 
   const { auth } = useSupabaseClient();
 
-  const _clearUser = () => {
-    state.user = null;
-  };
-
   const loadUser = async () => {
     const { data, error } = await auth.getUser();
     if (error) {
-      _clearUser();
+      state.$reset();
     }
     state.user = data.user;
     return data.user;
@@ -62,8 +58,8 @@ export const useAuth = () => {
   };
 
   const handleLogout = async () => {
+    state.$reset();
     await auth.signOut();
-    _clearUser();
   };
 
   const { loggedIn } = storeToRefs(state);
@@ -80,21 +76,23 @@ export const useAuth = () => {
     }
   });
 
-  const loggedOutRedirect = () => {
-    // Avoids redirect when page meta disables it
-    if (currentRoute.value.meta.allowUnauthenticated) return;
-    router.navigate({
+  const loggedOutRedirect = (destinationRoute?: RouteLocationNormalizedGeneric) => {
+    // Allows navigation when page meta allows unauthenticated users
+    if (destinationRoute?.meta.allowUnauthenticated) return;
+    // The route is protected, redirect to login
+    return router.navigate({
       path: config.public.loginPage,
       query: {
         redirect: currentRoute.value.path,
       },
+      replace: true,
     });
   };
 
-  const loggedInRedirect = async () => {
+  const loggedInRedirect = () => {
     const path = getAuthRedirection(currentRoute.value);
     if (currentRoute.value.meta.redirectIfAuthenticated) {
-      router.navigate({
+      return router.navigate({
         path,
       });
     }
@@ -102,6 +100,11 @@ export const useAuth = () => {
 
   const getAuthRedirection = (route: RouteLocationNormalizedGeneric): string => {
     return typeof route.query.redirect === 'string' ? route.query.redirect : config.public.homePage;
+  };
+
+  const clearAuth = async () => {
+    await handleLogout();
+    return loggedOutRedirect();
   };
 
   return {
@@ -112,6 +115,7 @@ export const useAuth = () => {
     handleLogout,
     loggedOutRedirect,
     loggedInRedirect,
+    clearAuth,
   };
 };
 

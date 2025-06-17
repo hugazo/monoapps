@@ -37,7 +37,7 @@ allowUnverified?: boolean;
     pages.push({
       name: 'login-page',
       path: options.auth.loginPage,
-      file: resolve('../runtime/pages/login-page.vue'),
+      file: resolve('./runtime/pages/login-page.vue'),
       meta: {
         // Makes the login page public-only
         allowUnauthenticated: true,
@@ -50,13 +50,13 @@ allowUnverified?: boolean;
   addImports({
     name: 'default',
     as: 'useAuth',
-    from: resolve('../runtime/composables/useAuth'),
+    from: resolve('./runtime/composables/useAuth'),
   });
 
   // This adds the auth middleware to the app
   addRouteMiddleware({
     name: 'auth.global',
-    path: resolve('../runtime/middleware/00-auth'),
+    path: resolve('./runtime/middleware/00-auth'),
     global: true,
   });
 };
