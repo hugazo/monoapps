@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineEmits } from 'vue';
+import { ref, computed } from 'vue';
 
 interface CustomIonInputElement extends HTMLIonInputElement {
   nativeInput: HTMLInputElement;
