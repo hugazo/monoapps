@@ -120,6 +120,10 @@ export const useAuth = () => {
     return loggedOutRedirect();
   };
 
+  const initalizeAuth = async () => {
+    await callOnce('auth', () => loadUser(), { mode: 'navigation' });
+  };
+
   return {
     state,
     loadUser,
@@ -129,6 +133,7 @@ export const useAuth = () => {
     loggedOutRedirect,
     loggedInRedirect,
     clearAuth,
+    initalizeAuth,
   };
 };
 

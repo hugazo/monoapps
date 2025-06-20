@@ -1,9 +1,6 @@
 import useAuth from '../composables/useAuth';
 import {
   defineNuxtRouteMiddleware,
-  callOnce,
-  useIonRouter,
-  useRuntimeConfig,
 } from '#imports';
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
@@ -12,12 +9,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   const {
     state,
-    loadUser,
+    initalizeAuth,
     loggedInRedirect,
     loggedOutRedirect,
   } = useAuth();
   // Loads the user on first middleware call
-  await callOnce('auth', () => loadUser(), { mode: 'navigation' });
+  await initalizeAuth();
 
   // Handles public routes
   if (to.meta.allowUnauthenticated) {
