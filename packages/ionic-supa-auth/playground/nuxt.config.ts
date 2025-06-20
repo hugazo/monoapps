@@ -5,10 +5,15 @@ export default defineNuxtConfig({
     enabled: true,
   },
   supaAuth: {
-    // Options for the Supabase Auth module
     supabase: {
-      url: '',
-      key: '',
+      url: process.env.NUXT_PUBLIC_SUPABASE_URL ? process.env.NUXT_PUBLIC_SUPABASE_URL : '',
+      key: process.env.NUXT_PUBLIC_SUPABASE_KEY ? process.env.NUXT_PUBLIC_SUPABASE_KEY : '',
     },
+  },
+  supabase: {
+    // url: process.env.NUXT_PUBLIC_SUPABASE_URL,
+    // key: process.env.NUXT_PUBLIC_SUPABASE_KEY,
+    redirect: false,
+    useSsrCookies: false,
   },
 });

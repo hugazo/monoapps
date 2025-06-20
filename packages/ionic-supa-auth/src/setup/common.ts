@@ -15,9 +15,6 @@ export default async (options: ModuleOptions, nuxt: Nuxt) => {
 
   // Adds the supabase module to our Nuxt project
   await installModule('@nuxtjs/supabase', {
-    // Use the public Supabase URL and Key from environment variables
-    url: options.supabase.url,
-    key: options.supabase.key,
     // Changes Options for Supabase Client Side and Auth
     redirect: false,
     useSsrCookies: false,
