@@ -13,6 +13,15 @@ export default async (options: ModuleOptions, nuxt: Nuxt) => {
     },
   });
 
+  await installModule('@nuxtjs/tailwindcss', {
+    config: {
+      content: [
+        './src/**/*.{vue,js,ts,jsx,tsx}',
+      ],
+    },
+    exposeConfig: true,
+  });
+
   // Adds the supabase module to our Nuxt project
   await installModule('@nuxtjs/supabase', {
     // Changes Options for Supabase Client Side and Auth
@@ -23,4 +32,6 @@ export default async (options: ModuleOptions, nuxt: Nuxt) => {
   await installModule('@nuxt/image');
 
   await installModule('@pinia/nuxt');
+
+  // Add zod 4 as Auto Imports
 };
