@@ -1,7 +1,8 @@
-import type { RouteLocationNormalizedGeneric, RouteRecordNormalized } from 'vue-router';
+import type { RouteLocationNormalizedGeneric } from 'vue-router';
 import { z } from 'zod/v4';
 import { useForm } from '../composables/useForm';
 import authStore from '../store/auth';
+
 import {
   useSupabaseClient,
   useRuntimeConfig,
@@ -9,6 +10,8 @@ import {
   storeToRefs,
   useRouter,
   useIonRouter,
+  callOnce,
+  toastController,
 } from '#imports';
 
 export const useAuth = () => {
@@ -39,6 +42,8 @@ export const useAuth = () => {
     password: '',
   });
 
+  // TODO: Handle schema validation on form
+
   // type LoginSchema = z.output<typeof loginSchema>;
 
   const handleLogin = async () => {
@@ -49,8 +54,16 @@ export const useAuth = () => {
     }
     const result = await auth.signInWithPassword(loginForm.data.value);
     if (result.error) {
-      // TODO: Implement error handling for client
-      console.error('Login error', result.error);
+      const toast = await toastController.create({
+        message: result.error.message,
+        duration: 3000,
+        position: 'top',
+        color: 'danger',
+      });
+      await toast.present();
+
+      loginForm.isSubmitting.value = false;
+      return;
     }
     loginForm.clearForm();
     state.user = result.data.user;
