@@ -32,6 +32,7 @@
               label="Password"
               type="password"
               placeholder="Enter your password"
+              @keyup.enter.prevent="handleLogin"
             />
             <ion-button
               class="mt-4"
