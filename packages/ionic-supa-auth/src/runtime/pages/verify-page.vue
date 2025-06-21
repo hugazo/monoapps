@@ -6,7 +6,16 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-grid class="flex flex-col h-full items-center justify-center">
+      <!-- <template v-if="loadingPage">
+        <ion-spinner
+          class="flex items-center justify-center h-full"
+          name="crescent"
+          color="primary"
+        />
+      </template> -->
+      <ion-grid
+        class="flex flex-col h-full items-center justify-center"
+      >
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-text-center">
             <h1 class="text-2xl font-bold">
@@ -23,11 +32,20 @@
             </p> -->
           </ion-col>
         </ion-row>
+        <ion-row
+          v-if="firstFactor"
+          class="ion-justify-content-center"
+        >
+          <NuxtImg :src="state.firstFactor?.totp.qr_code" />
+          <p class="text-sm text-gray-500">
+            Please open your authenticator app and scan the code displayed.
+          </p>
+        </ion-row>
         <ion-row>
           <ui-pin-input
             :disabled="loading"
             placeholder="*"
-            @finished-input="handleFinishedPinInput"
+            @finished-input="handleVerification"
           />
         </ion-row>
       </ion-grid>
@@ -38,32 +56,14 @@
 <script setup lang="ts">
 import UiPinInput from '../components/pinInput.vue';
 import useMfa from '../composables/useMfa';
-import useAuth from '../composables/useAuth';
-import { ref } from '#imports';
 
-const { verify, state } = useMfa();
-const { loggedInRedirect } = useAuth();
+const {
+  loading,
+  state,
+  firstFactor,
+  handleVerification,
+  initializeFactors,
+} = useMfa();
 
-const loading = ref(false);
-const selectedFactor = ref(0);
-
-const handleFinishedPinInput = async (value: string) => {
-  loading.value = true;
-  try {
-    const factor = state.factors ? state.factors[selectedFactor.value] : null;
-    if (factor) {
-      const result = await verify(value, factor.id);
-      if (result?.data) {
-        await loggedInRedirect();
-      }
-    }
-  }
-  catch (error) {
-    console.error('Error verifying PIN:', error);
-    // Handle error (e.g., show a toast or alert)
-  }
-  finally {
-    loading.value = false;
-  }
-};
+await initializeFactors();
 </script>

@@ -1,12 +1,13 @@
 import type { RouteLocationNormalizedGeneric } from 'vue-router';
-// TODO: Fix store
 import authStore from '../store/auth';
+import { useAuth } from '../composables/useAuth';
 import {
   useSupabaseClient,
-  useAsyncData,
+  callOnce,
   computed,
   useRuntimeConfig,
   useIonRouter,
+  ref,
 } from '#imports';
 
 export default () => {
@@ -14,79 +15,75 @@ export default () => {
   const state = authStore();
   const config = useRuntimeConfig();
   const router = useIonRouter();
+  const loading = ref(false);
+  const selectedFactor = ref<number>(0);
+  const {
+    loadUser,
+    loggedOutRedirect,
+    getAuthRedirection,
+  } = useAuth();
 
-  const factors = useAsyncData('factors', async () => {
-    if (state.loggedIn) {
-      const fetchedFactors = await auth.mfa.listFactors();
-      if (fetchedFactors.error) {
-        state.factors = null;
-        return null;
-      }
-      state.factors = fetchedFactors.data.all;
-      return state.factors;
+  const loadFactors = async () => {
+    loading.value = true;
+    await loadUser();
+    if (state.loggedIn === false) {
+      loggedOutRedirect();
     }
-    return null;
+
+    const fetchedFactors = await auth.mfa.listFactors();
+    if (fetchedFactors.error) {
+      state.factors = [];
+      loading.value = false;
+      return null;
+    }
+    state.factors = fetchedFactors.data.all;
+    if (availableFactors.value.length === 0) {
+      await updateFirstFactor();
+    }
+    loading.value = false;
+    return state.factors;
+  };
+
+  const initializeFactors = async () => {
+    await callOnce('factors', () => loadFactors());
+  };
+
+  const availableFactors = computed(() => {
+    return state.factors?.filter(factor => factor.status === 'verified') || [];
   });
 
-  const firstMfa = computed(() => {
-    const allFactors = state.factors;
+  const firstFactor = computed(() => {
+    return state.firstFactor ? true : false;
+  });
 
-    return allFactors?.find(factor => factor.status === 'unverified' && factor.friendly_name === 'default') || false;
+  const factorIdToVerify = computed(() => {
+    if (firstFactor.value) {
+      return state.firstFactor?.id;
+    }
+    return state.factors ? state.factors[selectedFactor.value].id : null;
   });
 
   const updateFirstFactor = async () => {
-    if (state.loggedIn) {
-      // First we load the factors
-      await factors.execute();
-      // Check if there is already created a default MFA factor an unenrolls it
-      if (firstMfa.value && !state.firstFactor) {
-        await auth.mfa.unenroll({
-          factorId: firstMfa.value.id,
-        });
-      }
-      // Enrolls the new factor to obtain the QR data
-      const result = await auth.mfa.enroll({ factorType: 'totp', friendlyName: 'default' });
-      if (result.data) {
-        state.firstFactor = result;
-        return state.firstFactor;
-      }
-      return null;
+    const unverifiedFactor = state.factors?.find(factor => factor.status === 'unverified' && factor.friendly_name === 'default');
+    if (unverifiedFactor) {
+      await auth.mfa.unenroll({
+        factorId: unverifiedFactor.id,
+      });
+      const filteredFactors = state.factors?.filter(factor => factor.id !== unverifiedFactor.id);
+      state.factors = filteredFactors || [];
     }
-    return null;
+    const result = await auth.mfa.enroll({ factorType: 'totp', friendlyName: 'default' });
+    if (result.data) {
+      state.firstFactor = result.data;
+    }
+    return state.firstFactor;
   };
 
   const getAssuranceLevel = async () => await auth.mfa.getAuthenticatorAssuranceLevel();
 
-  const verify = async (code: string, factorId: string) => {
-    if (state.loggedIn) {
-      const result = await auth.mfa.challengeAndVerify({
-        factorId,
-        code: code,
-      });
-      return result;
-    }
-    return null;
-  };
-
-  const enroll = async (code: string) => {
-    if (state.loggedIn) {
-      if (state.firstFactor?.data?.id) {
-        const result = await auth.mfa.challengeAndVerify({
-          factorId: state.firstFactor.data.id,
-          code: code,
-        });
-        return result;
-      }
-      else {
-        throw new Error('No factor data available');
-      }
-    }
-    return null;
-  };
-
-  const verifyRedirect = async (to: RouteLocationNormalizedGeneric) => {
+  const unverifiedRedirect = async (to: RouteLocationNormalizedGeneric) => {
     // Route allows allows unverified users
-    if (to.meta.allowUnverified) return;
+    if (to.meta.allowUnverified) return true;
     // Redirect to verify page
     return router.navigate({
       path: config.public.verifyPage,
@@ -97,28 +94,47 @@ export default () => {
     });
   };
 
-  const enrollRedirect = (to: RouteLocationNormalizedGeneric) => {
-    // Route allows non-enrolled users
-    if (to.meta.allowNonEnrolled) return;
-    // Redirect to enroll page
-    return router.navigate({
-      path: config.public.enrollPage,
-      query: {
-        redirect: to.query.redirect,
-      },
-      replace: true,
-    });
+  // const verifiedRedirect = async (to: RouteLocationNormalizedGeneric) => {to.meta.allowUnverified ? loggedInRedirect() : true;
+
+  const verifiedRedirect = async (to: RouteLocationNormalizedGeneric) => {
+    // Route redirects if verified
+    if (to.meta.allowUnverified) {
+      const path = getAuthRedirection(to);
+      return router.navigate({
+        path,
+      });
+    }
+    // Route proceeds
+    return true;
+  };
+
+  const handleVerification = async (code: string) => {
+    if (factorIdToVerify.value) {
+      const result = await auth.mfa.challengeAndVerify({
+        factorId: factorIdToVerify.value,
+        code,
+      });
+      if (result.data) {
+        const path = getAuthRedirection();
+        return router.navigate({
+          path,
+        });
+      }
+    }
+    else {
+      throw new Error('No factor to verify');
+    }
   };
 
   return {
-    factors,
-    firstMfa,
     state,
-    updateFirstFactor,
-    enroll,
-    verify,
-    verifyRedirect,
-    enrollRedirect,
+    availableFactors,
+    verifiedRedirect,
+    unverifiedRedirect,
     getAssuranceLevel,
+    initializeFactors,
+    firstFactor,
+    loading,
+    handleVerification,
   };
 };

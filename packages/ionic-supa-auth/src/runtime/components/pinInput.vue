@@ -47,7 +47,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import {
+  ref,
+  computed,
+  onUnmounted,
+} from 'vue';
 
 interface CustomIonInputElement extends HTMLIonInputElement {
   nativeInput: HTMLInputElement;
@@ -268,6 +272,10 @@ const handleClick = (event: MouseEvent) => {
 const resetInput = () => {
   inputValues.value = [];
 };
+
+onUnmounted(() => {
+  inputValues.value = [];
+});
 </script>
 
 <style>

@@ -19,21 +19,11 @@ export default (options: ModuleOptions, resolver: Resolver) => {
 
   extendPages((pages) => {
     pages.push({
-      name: 'enroll-page',
-      path: options.auth.enrollPage,
-      file: resolver.resolve('./runtime/pages/enroll-page.vue'),
-      meta: {
-        allowNonEnrolled: true,
-        redirectIfAuthenticated: true,
-      },
-    });
-    pages.push({
       name: 'verify-page',
       path: options.auth.verifyPage,
       file: resolver.resolve('./runtime/pages/verify-page.vue'),
       meta: {
         allowUnverified: true,
-        redirectIfAuthenticated: true,
       },
     });
   });

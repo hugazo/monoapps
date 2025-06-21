@@ -111,8 +111,8 @@ export const useAuth = () => {
     }
   };
 
-  const getAuthRedirection = (route: RouteLocationNormalizedGeneric): string => {
-    return typeof route.query.redirect === 'string' ? route.query.redirect : config.public.homePage;
+  const getAuthRedirection = (route?: RouteLocationNormalizedGeneric): string => {
+    return typeof route?.query.redirect === 'string' ? route?.query.redirect : config.public.homePage;
   };
 
   const clearAuth = async () => {
@@ -121,7 +121,7 @@ export const useAuth = () => {
   };
 
   const initalizeAuth = async () => {
-    await callOnce('auth', () => loadUser(), { mode: 'navigation' });
+    await callOnce('auth', () => loadUser());
   };
 
   return {
@@ -134,6 +134,7 @@ export const useAuth = () => {
     loggedInRedirect,
     clearAuth,
     initalizeAuth,
+    getAuthRedirection,
   };
 };
 

@@ -22,7 +22,7 @@ export default defineStore('auth', () => {
 
   // MFA
   const factors = ref<Factor[] | null>(null);
-  const firstFactor = ref<AuthMFAEnrollTOTPResponse | null>(null);
+  const firstFactor = ref<AuthMFAEnrollTOTPResponse['data'] | null>(null);
 
   return {
     user,

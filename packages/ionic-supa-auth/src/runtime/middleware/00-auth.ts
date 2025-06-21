@@ -1,4 +1,5 @@
 import useAuth from '../composables/useAuth';
+
 import {
   defineNuxtRouteMiddleware,
 } from '#imports';
@@ -6,7 +7,6 @@ import {
 export default defineNuxtRouteMiddleware(async (to, from) => {
   // First navigation, skips middleware to let the app load
   if (from.matched.length === 0) return;
-
   const {
     state,
     initalizeAuth,

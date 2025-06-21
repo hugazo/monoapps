@@ -5,6 +5,8 @@ import type { ModuleOptions } from '../module';
 export default async (options: ModuleOptions, nuxt: Nuxt) => {
   // Sets the project as only Client-side (Since Ionic Requires it)
   nuxt.options.ssr = options.enableSsr;
+  // State before ionic
+  await installModule('@pinia/nuxt');
 
   // Add the Ionic Module to our Nuxt project
   await installModule('@nuxtjs/ionic', {
@@ -31,7 +33,6 @@ export default async (options: ModuleOptions, nuxt: Nuxt) => {
 
   await installModule('@nuxt/image');
 
-  await installModule('@pinia/nuxt');
 
   // Add zod 4 as Auto Imports
 };
