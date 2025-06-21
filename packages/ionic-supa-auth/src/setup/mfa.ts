@@ -12,7 +12,6 @@ export default (options: ModuleOptions, resolver: Resolver) => {
 
   updateRuntimeConfig({
     public: {
-      enrollPage: options.auth.enrollPage,
       verifyPage: options.auth.verifyPage,
     },
   });

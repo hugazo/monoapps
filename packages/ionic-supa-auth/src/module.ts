@@ -19,7 +19,6 @@ const defaultOptions = {
     homePage: '/',
     loginPage: '/login',
     // 2fa settings
-    enrollPage: '/enroll',
     enable2fa: true,
     verifyPage: '/verify',
   },

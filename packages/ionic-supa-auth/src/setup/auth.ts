@@ -23,12 +23,11 @@ export default (options: ModuleOptions, resolver: Resolver) => {
   addTypeTemplate({
     filename: 'types/ionic-supa-auth.d.ts',
     getContents: () => `declare module '#app' {
-interface PageMeta {
-allowUnauthenticated?: boolean;
-redirectIfAuthenticated?: boolean;
-allowNonEnrolled?: boolean;
-allowUnverified?: boolean;
-}
+  interface PageMeta {
+  allowUnauthenticated?: boolean;
+  redirectIfAuthenticated?: boolean;
+  allowUnverified?: boolean;
+  }
 }`,
   });
 
