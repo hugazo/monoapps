@@ -1,10 +1,12 @@
 import type { RouteLocationNormalizedGeneric } from 'vue-router';
 import { z } from 'zod/v4';
+// import  from '@nuxtjs/supabase';
 import { useForm } from '../composables/useForm';
 import authStore from '../store/auth';
 
 import {
   useSupabaseClient,
+  useSupabaseUser,
   useRuntimeConfig,
   watch,
   storeToRefs,
@@ -19,16 +21,16 @@ export const useAuth = () => {
   const config = useRuntimeConfig();
   const { currentRoute } = useRouter();
   const router = useIonRouter();
-
   const { auth } = useSupabaseClient();
 
   const loadUser = async () => {
-    const { data, error } = await auth.getUser();
-    if (error) {
-      state.$reset();
+    const user = useSupabaseUser();
+    if (user.value) {
+      state.user = user.value;
+      return user.value;
     }
-    state.user = data.user;
-    return data.user;
+    state.$reset();
+    return null;
   };
 
   // Helper to be used in templates and to validate login

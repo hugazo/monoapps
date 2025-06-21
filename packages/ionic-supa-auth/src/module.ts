@@ -10,8 +10,8 @@ const defaultOptions = {
   // Default to false since Ionic requires client-side rendering
   enableSsr: false,
   supabase: {
-    url: '',
-    key: '',
+    url: process.env.NUXT_PUBLIC_SUPABASE_URL || '',
+    key: process.env.NUXT_PUBLIC_SUPABASE_KEY || '',
   },
   auth: {
     // Default options for the Supabase Auth module
@@ -37,11 +37,11 @@ export default defineNuxtModule<ModuleOptions>({
   defaults: defaultOptions,
   async setup(options, nuxt) {
     // Sets up the needed modules for this integration
+    const resolver = createResolver(import.meta.url);
     // @nuxt/ionic, @nuxtjs/supabase, and @pinia/nuxt
-    setupCommonModules(options, nuxt);
+    setupCommonModules(options, nuxt, resolver);
 
     if (options.auth.enabled) {
-      const resolver = createResolver(import.meta.url);
       // Executes the auth setup for the module
       // This will add the auth composable, middleware, and pages
       setupAuth(options, resolver);

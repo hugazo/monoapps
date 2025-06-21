@@ -1,8 +1,9 @@
+import type { Resolver } from '@nuxt/kit';
 import { installModule } from '@nuxt/kit';
 import type { Nuxt } from '@nuxt/schema';
 import type { ModuleOptions } from '../module';
 
-export default async (options: ModuleOptions, nuxt: Nuxt) => {
+export default async (options: ModuleOptions, nuxt: Nuxt, resolver: Resolver) => {
   // Sets the project as only Client-side (Since Ionic Requires it)
   nuxt.options.ssr = options.enableSsr;
   // State before ionic
@@ -16,9 +17,10 @@ export default async (options: ModuleOptions, nuxt: Nuxt) => {
   });
 
   await installModule('@nuxtjs/tailwindcss', {
+    configPath: resolver.resolve('./tailwind.config'),
     config: {
       content: [
-        './src/**/*.{vue,js,ts,jsx,tsx}',
+        './src/runtime/**/*.{js,ts,vue}',
       ],
     },
     exposeConfig: true,
@@ -27,12 +29,13 @@ export default async (options: ModuleOptions, nuxt: Nuxt) => {
   // Adds the supabase module to our Nuxt project
   await installModule('@nuxtjs/supabase', {
     // Changes Options for Supabase Client Side and Auth
+    url: options.supabase.url,
+    key: options.supabase.key,
     redirect: false,
     useSsrCookies: false,
   });
 
   await installModule('@nuxt/image');
-
 
   // Add zod 4 as Auto Imports
 };
