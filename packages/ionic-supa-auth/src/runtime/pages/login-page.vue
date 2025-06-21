@@ -1,10 +1,5 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Login</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-content>
       <ion-grid class="flex flex-col h-full items-center justify-center">
         <ion-row>
@@ -50,10 +45,10 @@
 </template>
 
 <script async setup lang="ts">
-import useSession from '../composables/useAuth';
+import { useAuth } from '../composables/useAuth';
 
 const {
   loginForm,
   handleLogin,
-} = useSession();
+} = useAuth();
 </script>

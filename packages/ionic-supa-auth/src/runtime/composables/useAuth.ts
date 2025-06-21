@@ -1,6 +1,10 @@
 import type { RouteLocationNormalizedGeneric } from 'vue-router';
 import { z } from 'zod/v4';
 // import  from '@nuxtjs/supabase';
+import {
+  alertCircle,
+  person,
+} from 'ionicons/icons';
 import { useForm } from '../composables/useForm';
 import authStore from '../store/auth';
 
@@ -56,17 +60,27 @@ export const useAuth = () => {
     }
     const result = await auth.signInWithPassword(loginForm.data.value);
     if (result.error) {
-      const toast = await toastController.create({
+      const errorToast = await toastController.create({
         message: result.error.message,
         duration: 3000,
+        icon: alertCircle,
         position: 'top',
         color: 'danger',
       });
-      await toast.present();
+      await errorToast.present();
 
       loginForm.isSubmitting.value = false;
       return;
     }
+    const successToast = await toastController.create({
+      message: 'Login successful',
+      duration: 3000,
+      icon: person,
+      position: 'top',
+      color: 'success',
+    });
+    await successToast.present();
+    // Clear the form after successful login
     loginForm.clearForm();
     state.user = result.data.user;
     loginForm.isSubmitting.value = false;
