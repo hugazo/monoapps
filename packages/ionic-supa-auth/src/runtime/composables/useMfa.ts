@@ -1,6 +1,7 @@
 import type { RouteLocationNormalizedGeneric } from 'vue-router';
 import authStore from '../store/auth';
 import { useAuth } from '../composables/useAuth';
+import { useToast } from './useToast';
 import {
   useSupabaseClient,
   callOnce,
@@ -15,18 +16,22 @@ export default () => {
   const state = authStore();
   const config = useRuntimeConfig();
   const router = useIonRouter();
-  const loading = ref(false);
-  const selectedFactor = ref<number>(0);
+  const { showErrorToast, showSuccessToast } = useToast();
   const {
     loadUser,
     loggedOutRedirect,
     getAuthRedirection,
   } = useAuth();
 
+  const loading = ref(false);
+  const selectedFactor = ref<number>(0);
+
+
   const loadFactors = async () => {
     loading.value = true;
     await loadUser();
     if (state.loggedIn === false) {
+      loading.value = false;
       loggedOutRedirect();
     }
 
@@ -116,9 +121,13 @@ export default () => {
       });
       if (result.data) {
         const path = getAuthRedirection();
+        showSuccessToast('MFA verification successful');
         return router.navigate({
           path,
         });
+      }
+      if (result.error) {
+        showErrorToast(result.error.message);
       }
     }
     else {

@@ -1,18 +1,6 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Verify</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-content>
-      <!-- <template v-if="loadingPage">
-        <ion-spinner
-          class="flex items-center justify-center h-full"
-          name="crescent"
-          color="primary"
-        />
-      </template> -->
       <ion-grid
         class="flex flex-col h-full items-center justify-center"
       >
