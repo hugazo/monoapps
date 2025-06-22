@@ -6,8 +6,10 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
-      <h1>Welcome to Nuxt 3 with Ionic!</h1>
+    <ion-content class="flex flex-col h-full items-center justify-center">
+      <h1 class="text-2xl font-bold mb-4  ">
+        Welcome to Nuxt 3 with Ionic!
+      </h1>
       <p>This is a simple starter page.</p>
       <ion-button @click="handleLogout()">
         Logout

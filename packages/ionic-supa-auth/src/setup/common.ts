@@ -20,6 +20,7 @@ export default async (options: ModuleOptions, nuxt: Nuxt, resolver: Resolver) =>
     configPath: resolver.resolve('./tailwind.config'),
     config: {
       content: [
+        resolver.resolve('./**/*.{js,ts,vue}'),
         './src/runtime/**/*.{js,ts,vue}',
       ],
     },
