@@ -24,8 +24,16 @@ const defaultOptions = {
   },
 };
 
-// Module options TypeScript interface definition
-export type ModuleOptions = typeof defaultOptions;
+// Helper
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object
+    ? DeepPartial<T[P]>
+    : T[P];
+};
+
+type BaseModuleOptions = typeof defaultOptions;
+
+export type ModuleOptions = DeepPartial<BaseModuleOptions>;
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
@@ -39,6 +47,9 @@ export default defineNuxtModule<ModuleOptions>({
     const resolver = createResolver(import.meta.url);
     // @nuxt/ionic, @nuxtjs/supabase, and @pinia/nuxt
     setupCommonModules(options, nuxt, resolver);
+
+    // If no options are provided or auth is not enabled, skip the auth setup
+    if (!options || !options.auth) return;
 
     if (options.auth.enabled) {
       // Executes the auth setup for the module

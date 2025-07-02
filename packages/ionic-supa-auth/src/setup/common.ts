@@ -5,7 +5,7 @@ import type { ModuleOptions } from '../module';
 
 export default async (options: ModuleOptions, nuxt: Nuxt, resolver: Resolver) => {
   // Sets the project as only Client-side (Since Ionic Requires it)
-  nuxt.options.ssr = options.enableSsr;
+  nuxt.options.ssr = options.enableSsr as boolean;
   // State before ionic
   await installModule('@pinia/nuxt');
 
@@ -30,8 +30,8 @@ export default async (options: ModuleOptions, nuxt: Nuxt, resolver: Resolver) =>
   // Adds the supabase module to our Nuxt project
   await installModule('@nuxtjs/supabase', {
     // Changes Options for Supabase Client Side and Auth
-    url: options.supabase.url,
-    key: options.supabase.key,
+    url: options?.supabase?.url as string,
+    key: options?.supabase?.key as string,
     redirect: false,
     useSsrCookies: false,
   });
