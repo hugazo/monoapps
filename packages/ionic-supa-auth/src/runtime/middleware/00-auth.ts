@@ -6,7 +6,11 @@ import {
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   // First navigation, skips middleware to let the app load
-  if (from.matched.length === 0) return;
+  if (from.matched.length === 0) {
+    console.log('Skipping auth middleware on first navigation');
+    return;
+  }
+
   const {
     state,
     initalizeAuth,
@@ -16,20 +20,18 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // Loads the user on first middleware call
   await initalizeAuth();
 
+  // Now we handle protected routes
   // Handles public routes
   if (to.meta.allowUnauthenticated) {
     if (state.loggedIn && to.meta.redirectIfAuthenticated) {
       // Public only route
       return loggedInRedirect();
     }
+    return;
   }
 
-  // Now we handle protected routes
   if (!state.loggedIn) {
     // User not logged redirection
-    if (to.meta.allowUnauthenticated) {
-      return;
-    }
     return loggedOutRedirect(to);
   }
 });

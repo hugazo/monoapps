@@ -90,20 +90,22 @@ export default () => {
     // Route allows allows unverified users
     if (to.meta.allowUnverified) return true;
     // Redirect to verify page
+    const redirect = getAuthRedirection(to);
     return router.navigate({
       path: config.public.verifyPage,
       query: {
-        redirect: to.query.redirect,
+        redirect,
       },
       replace: true,
     });
   };
 
-  // const verifiedRedirect = async (to: RouteLocationNormalizedGeneric) => {to.meta.allowUnverified ? loggedInRedirect() : true;
-
   const verifiedRedirect = async (to: RouteLocationNormalizedGeneric) => {
     // Route redirects if verified
-    if (to.meta.allowUnverified) {
+    if (
+      to.meta.allowUnverified
+      || to.path === config.public.verifyPage
+    ) {
       const path = getAuthRedirection(to);
       return router.navigate({
         path,

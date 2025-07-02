@@ -62,11 +62,13 @@ export const useAuth = () => {
       loginForm.isSubmitting.value = false;
       return;
     }
-    showSuccessToast('Login successful');
-    // Clear the form after successful login
-    loginForm.clearForm();
-    state.user = result.data.user;
-    loginForm.isSubmitting.value = false;
+    if (result.data) {
+      showSuccessToast('Login successful');
+      // Clear the form after successful login
+      loginForm.clearForm();
+      state.user = result.data.user;
+      loginForm.isSubmitting.value = false;
+    }
   };
 
   const handleLogout = async () => {
@@ -90,29 +92,39 @@ export const useAuth = () => {
   });
 
   const loggedOutRedirect = (destinationRoute?: RouteLocationNormalizedGeneric) => {
-    // Allows navigation when page meta allows unauthenticated users
-    if (destinationRoute?.meta.allowUnauthenticated) return;
+    if (
+      // Allows navigation to the login page
+      destinationRoute?.path === config.public.loginPage
+      // Allows navigation when page meta allows unauthenticated users
+      || destinationRoute?.meta.allowUnauthenticated
+    ) return;
     // The route is protected, redirect to login
-    return router.navigate({
+    return router.push({
       path: config.public.loginPage,
       query: {
         redirect: currentRoute.value.path,
       },
-      replace: true,
     });
   };
 
   const loggedInRedirect = () => {
     const path = getAuthRedirection(currentRoute.value);
     if (currentRoute.value.meta.redirectIfAuthenticated) {
-      return router.navigate({
+      return router.push({
         path,
       });
     }
   };
 
   const getAuthRedirection = (route?: RouteLocationNormalizedGeneric): string => {
-    return typeof route?.query.redirect === 'string' ? route?.query.redirect : config.public.homePage;
+    const redirect = route?.query.redirect;
+    if (
+      redirect === config.public.loginPage
+      || redirect === config.public.verifyPage
+    ) {
+      return config.public.homePage;
+    }
+    return typeof redirect === 'string' ? redirect : config.public.homePage;
   };
 
   const clearAuth = async () => {
