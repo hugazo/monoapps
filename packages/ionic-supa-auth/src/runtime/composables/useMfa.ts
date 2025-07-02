@@ -91,12 +91,11 @@ export default () => {
     if (to.meta.allowUnverified) return true;
     // Redirect to verify page
     const redirect = getAuthRedirection(to);
-    return router.navigate({
+    return router.push({
       path: config.public.verifyPage,
       query: {
         redirect,
       },
-      replace: true,
     });
   };
 
@@ -107,7 +106,7 @@ export default () => {
       || to.path === config.public.verifyPage
     ) {
       const path = getAuthRedirection(to);
-      return router.navigate({
+      return router.push({
         path,
       });
     }
@@ -124,7 +123,7 @@ export default () => {
       if (result.data) {
         const path = getAuthRedirection();
         showSuccessToast('MFA verification successful');
-        return router.navigate({
+        return router.push({
           path,
         });
       }
