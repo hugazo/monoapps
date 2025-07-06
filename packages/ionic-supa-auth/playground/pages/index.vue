@@ -11,7 +11,10 @@
         Welcome to Nuxt 3 with Ionic!
       </h1>
       <p>This is a simple starter page.</p>
-      <ion-button @click="handleLogout()">
+      <ion-button
+        v-if="state.loggedIn"
+        @click="handleLogout()"
+      >
         Logout
       </ion-button>
     </ion-content>
@@ -24,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-const { handleLogout } = useAuth();
+const { handleLogout, state } = useAuth();
 // This page should be protected by the supa-auth module, and only accessible to authenticated users.
 // If the user is not authenticated, they should be redirected to the login page.
 </script>
