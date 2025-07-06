@@ -19,7 +19,11 @@ Find and replace all on all files (CMD+SHIFT+F):
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-My new Nuxt module for doing amazing things.
+I was tired of writing the same boilerplate code for my Nuxt applications, so I created this module to automate the setup of common features like authentication, multi-factor authentication (MFA), and more.
+
+It is a batteries-included solution to quickly set up a Web, iOS, or Android application with Vue and Nuxt, using the Ionic Framework, and Supabase as the backend.
+
+It provides a set of composables, middleware, and pages to handle authentication and MFA, along with automatic module injection for Ionic, Tailwind CSS, Pinia, and Supabase.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
 <!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
