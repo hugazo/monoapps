@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineVitestConfig } from '@nuxt/test-utils/config';
 
 export default defineVitestConfig({
@@ -5,10 +6,7 @@ export default defineVitestConfig({
   test: {
     environmentOptions: {
       nuxt: {
-        mock: {
-          intersectionObserver: true,
-          indexedDb: true,
-        },
+        rootDir: fileURLToPath(new URL('./playground', import.meta.url)),
       },
     },
   },

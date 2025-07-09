@@ -4,4 +4,8 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
+  supabase: {
+    url: 'https://your-supabase-url.supabase.co',
+    key: 'your-anon-key',
+  },
 });
