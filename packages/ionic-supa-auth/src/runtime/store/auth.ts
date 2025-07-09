@@ -3,8 +3,8 @@ import type {
   Factor,
   AuthMFAEnrollTOTPResponse,
 } from '@supabase/auth-js';
+import { defineStore } from 'pinia';
 import {
-  defineStore,
   ref,
   computed,
 } from '#imports';
