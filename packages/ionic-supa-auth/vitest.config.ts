@@ -1,12 +1,13 @@
-import { fileURLToPath } from 'node:url';
 import { defineVitestConfig } from '@nuxt/test-utils/config';
 
 export default defineVitestConfig({
   // Enable Nuxt environment for testing
   test: {
+    environment: 'nuxt',
+    globals: true,
     environmentOptions: {
       nuxt: {
-        rootDir: fileURLToPath(new URL('./playground', import.meta.url)),
+        rootDir: './playground',
       },
     },
   },
