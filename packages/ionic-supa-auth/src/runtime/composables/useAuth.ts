@@ -1,8 +1,8 @@
 import type { RouteLocationNormalizedGeneric } from 'vue-router';
 import { z } from 'zod/v4';
-// import  from '@nuxtjs/supabase';
+import { storeToRefs } from 'pinia';
 import { useForm } from '../composables/useForm';
-import authStore from '../store/auth';
+import useAuthStore from '../store/auth';
 import { useToast } from './useToast';
 
 import {
@@ -10,14 +10,16 @@ import {
   useSupabaseUser,
   useRuntimeConfig,
   watch,
-  storeToRefs,
   useRouter,
   useIonRouter,
   callOnce,
+  usePinia,
 } from '#imports';
 
 export const useAuth = () => {
-  const state = authStore();
+  const pinia = usePinia();
+
+  const state = useAuthStore(pinia);
   const config = useRuntimeConfig();
   const { currentRoute } = useRouter();
   const router = useIonRouter();
